@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบ Checklist ตรวจสอบมาตรฐานการทำงาน</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --font-sans:'Sarabun',sans-serif;
+  --color-text-primary:#1a1a1a;--color-text-secondary:#6b7280;
+  --color-background-primary:#ffffff;--color-background-secondary:#f5f5f4;
+  --color-border-primary:#9ca3af;--color-border-secondary:#d1d5db;
+  --color-border-tertiary:#e5e7eb;--color-border-danger:#fca5a5;
+  --color-text-danger:#dc2626;--color-background-danger:#fef2f2;
+  --border-radius-md:6px;--border-radius-lg:10px;
+}
+body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);background:#f9fafb;min-height:100vh}
+.container{max-width:720px;margin:0 auto;padding:24px 16px}
+h1{font-size:18px;font-weight:600;margin-bottom:4px}
+.subtitle{font-size:13px;color:var(--color-text-secondary);margin-bottom:20px}
+.tab-bar{display:flex;gap:4px;margin-bottom:1.5rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:0;overflow-x:auto}
+.tab{padding:8px 14px;cursor:pointer;font-size:13px;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:#1a1a1a;font-weight:500}
+.tab:hover:not(.active){color:var(--color-text-primary)}
+.section{display:none}.section.active{display:block}
+.card{background:#fff;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-row.full{grid-template-columns:1fr}
+label{font-size:12px;color:var(--color-text-secondary);display:block;margin-bottom:4px}
+input,select,textarea{width:100%;padding:8px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;font-family:var(--font-sans);background:#fff;color:var(--color-text-primary)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#9ca3af}
+textarea{resize:vertical;min-height:60px}
+.btn{padding:8px 16px;border-radius:var(--border-radius-md);cursor:pointer;font-size:13px;font-family:var(--font-sans);transition:all 0.15s}
+.btn-primary{background:#1a1a1a;color:#fff;border:none}
+.btn-primary:hover{background:#333}
+.btn-secondary{background:transparent;border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary)}
+.btn-secondary:hover{background:#f5f5f4}
+.btn-danger{background:transparent;border:0.5px solid var(--color-border-danger);color:var(--color-text-danger)}
+.btn-danger:hover{background:#fef2f2}
+.btn-sm{padding:5px 10px;font-size:12px}
+.topic-block{background:#f9fafb;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:14px;margin-bottom:12px}
+.topic-title{font-size:14px;font-weight:500;margin-bottom:10px}
+.star-row{display:flex;gap:6px;align-items:center;margin-bottom:8px}
+.star{font-size:26px;cursor:pointer;color:#d1d5db;transition:color 0.1s;user-select:none;line-height:1}
+.star.active{color:#EF9F27}
+.star:hover{color:#EF9F27}
+.score-label{font-size:12px;color:#6b7280;margin-left:6px}
+.note-input{width:100%;padding:6px 8px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:12px;font-family:var(--font-sans);background:#fff;color:var(--color-text-primary);margin-top:4px}
+.status-badge{display:inline-block;padding:3px 8px;border-radius:var(--border-radius-md);font-size:11px;font-weight:500}
+.badge-pass{background:#EAF3DE;color:#3B6D11}
+.badge-fail{background:#FCEBEB;color:#A32D2D}
+.badge-mid{background:#FAEEDA;color:#BA7517}
+.record-item{padding:12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:8px;cursor:pointer;transition:all 0.15s;background:#fff}
+.record-item:hover{background:#f5f5f4}
+.record-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px}
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+.metric-card{background:#fff;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.metric-val{font-size:22px;font-weight:500;margin-bottom:2px}
+.metric-lbl{font-size:11px;color:#6b7280}
+.progress-bar{height:8px;background:#f3f4f6;border-radius:4px;overflow:hidden;margin:6px 0}
+.progress-fill{height:100%;border-radius:4px;transition:width 0.3s}
+.flex-between{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.section-title{font-size:15px;font-weight:500;margin-bottom:1rem}
+.topic-row{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+.topic-row input{flex:1}
+.empty-state{text-align:center;padding:2rem;color:#6b7280;font-size:13px}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal{background:#fff;border-radius:var(--border-radius-lg);padding:1.5rem;width:90%;max-width:560px;max-height:85vh;overflow-y:auto;border:0.5px solid var(--color-border-tertiary)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+@media(max-width:560px){.form-row{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+  <h1>📋 ระบบ Checklist ตรวจสอบมาตรฐานการทำงาน</h1>
+  <p class="subtitle">บันทึกและติดตามผลการตรวจสอบมาตรฐานการทำงาน</p>
+  <div class="tab-bar">
+    <div class="tab active" onclick="switchTab('form')">สร้างการตรวจ</div>
+    <div class="tab" onclick="switchTab('records')">รายการตรวจ</div>
+    <div class="tab" onclick="switchTab('dashboard')">Dashboard</div>
+    <div class="tab" onclick="switchTab('settings')">จัดการหัวข้อ</div>
+  </div>
+
+  <!-- FORM -->
+  <div id="sec-form" class="section active">
+    <div class="card">
+      <p class="section-title">ข้อมูลการตรวจ</p>
+      <div class="form-row">
+        <div>
+          <label>ชื่อผู้ตรวจ</label>
+          <select id="f-inspector">
+            <option value="">— เลือกผู้ตรวจ —</option>
+            <option>อนาวิล</option><option>ธัญรดา</option><option>รวิสรา</option>
+            <option>ปภัสรา</option><option>สุจิตรา</option><option>พัชริน</option>
+            <option>พัทธ์ธีรา</option><option>ธันยนันท์</option><option>อาจณรงค์</option>
+          </select>
+        </div>
+        <div>
+          <label>ชื่อผู้ถูกตรวจ</label>
+          <select id="f-inspectee">
+            <option value="">— เลือกผู้ถูกตรวจ —</option>
+            <option>สุนารี พรมโสดา</option>
+            <option>นาฏศุภางค์ ราศรีสวัสดิ์</option>
+            <option>นิรชา นิลอาจ</option>
+            <option>ปิยวรรณ ตอบุดดี</option>
+            <option>ณัฐนี ศรเพชร</option>
+            <option>ณัฐวรรณ ศรีชมภู</option>
+            <option>สายพิณ ไหวคิด</option>
+            <option>ลักษณา ท้าวคาม</option>
+            <option>เพ็ญพักตร์ วันคำ</option>
+            <option>สุภิญญา คำคูณ</option>
+            <option>สุภวรรณ วงศ์รุ่ง</option>
+            <option>นิรชา พานทอง</option>
+            <option>ทิพวรรณ จิตร์เอื้อเฟื้อ</option>
+            <option>วิภาวรรณ แพ่งกลิ่น</option>
+            <option>ละมัย กันยานะ</option>
+            <option>ขนิษฐา ศรีระเริง</option>
+            <option>ศิริพร หอมหนองจะบก</option>
+            <option>รินลดา อามาตย์สมบัติ</option>
+            <option>วรารัตน์ กลัดแก้ว</option>
+            <option>วาสนา แพงโพนทอง</option>
+            <option>ดีวัน แก้วการไร่</option>
+            <option>อรรถยา รัดชาตา</option>
+            <option>อัญชลี ศุภไทย</option>
+            <option>นันทภัค ศรีเจริญ</option>
+            <option>สุปราณี สมบูรณ์</option>
+            <option>สมพร อยู่สวัสดิ์</option>
+            <option>กัลยา แซ่ตั้ง</option>
+            <option>ศิตาลักษณ์ บัวนุช</option>
+            <option>ช่อผกา ตักเตือน</option>
+            <option>สุธีกานต์ กุลทอง</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div><label>วันที่ตรวจ</label><input id="f-date" type="date"></div>
+        <div>
+          <label>สถานที่ตรวจ</label>
+          <select id="f-location">
+            <option value="">— เลือกสถานที่ —</option>
+            <option>ห้องการเงิน SCP</option>
+            <option>AUTO SPA</option>
+            <option>BLUE MOON</option>
+            <option>Another Hound</option>
+            <option>SPD ทางออก 1</option>
+            <option>SPD ทางออก 2</option>
+            <option>SPD ทางออก 3</option>
+            <option>SPD ทางออก 4</option>
+            <option>SPD ทางออก 5</option>
+            <option>SPD ทางออก 6</option>
+            <option>SPD ทางออก 7</option>
+            <option>SPD ทางออก 8</option>
+            <option>SCP ทางออก 1</option>
+            <option>SCP ทางออก 2</option>
+            <option>SCP ทางออก 3</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div><label>หมายเหตุ</label><textarea id="f-note" placeholder="บันทึกเพิ่มเติม (ถ้ามี)"></textarea></div>
+      </div>
+    </div>
+    <div class="card">
+      <p class="section-title">หัวข้อที่ตรวจ <span style="font-size:12px;font-weight:400;color:#6b7280">(ให้คะแนน 1–5 ดาว)</span></p>
+      <div id="checklist-form-items"></div>
+      <div style="margin-top:12px;padding-top:12px;border-top:0.5px solid #e5e7eb;display:flex;justify-content:flex-end;align-items:center;gap:8px">
+        <span style="font-size:13px;color:#6b7280">คะแนนรวม:</span>
+        <span id="total-score-val" style="font-size:18px;font-weight:500">0 / 0</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-secondary" onclick="resetForm()">ล้างข้อมูล</button>
+      <button class="btn btn-primary" onclick="saveRecord()">บันทึกการตรวจ</button>
+    </div>
+  </div>
+
+  <!-- RECORDS -->
+  <div id="sec-records" class="section">
+    <div class="flex-between">
+      <p class="section-title" style="margin:0">รายการตรวจทั้งหมด</p>
+      <input style="width:200px" placeholder="ค้นหา..." oninput="renderRecords(this.value)">
+    </div>
+    <div id="records-list"></div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="sec-dashboard" class="section">
+    <div class="metric-grid" id="dash-metrics"></div>
+    <div class="card"><p class="section-title">คะแนนเฉลี่ยรายหัวข้อ</p><div id="dash-topics"></div></div>
+    <div class="card"><p class="section-title">การตรวจล่าสุด</p><div id="dash-recent"></div></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="sec-settings" class="section">
+    <div class="card">
+      <div class="flex-between">
+        <p class="section-title" style="margin:0">จัดการหัวข้อตรวจ</p>
+        <button class="btn btn-primary btn-sm" onclick="addTopic()">+ เพิ่มหัวข้อ</button>
+      </div>
+      <p style="font-size:12px;color:#6b7280;margin-bottom:12px">แต่ละหัวข้อใช้คะแนน 1–5 ดาว</p>
+      <div id="topics-list"></div>
+    </div>
+    <div class="card">
+      <p class="section-title">นำเข้าหัวข้อแบบเร็ว</p>
+      <textarea id="bulk-import" placeholder="วางรายการหัวข้อ (แต่ละบรรทัด = 1 หัวข้อ)" style="height:80px"></textarea>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <button class="btn btn-secondary btn-sm" onclick="bulkImport()">นำเข้า</button>
+        <button class="btn btn-danger btn-sm" onclick="clearTopics()">ล้างทั้งหมด</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modal" style="display:none" class="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script>
+const SCORE_LABELS=['','ต้องปรับปรุง','พอใช้','ปานกลาง','ดี','ดีเยี่ยม'];
+let state={
+  topics:JSON.parse(localStorage.getItem('ci4_topics')||'null')||['การต้อนรับ','การบริการ','Grooming'],
+  records:JSON.parse(localStorage.getItem('ci4_records')||'[]')
+};
+function save(){localStorage.setItem('ci4_topics',JSON.stringify(state.topics));localStorage.setItem('ci4_records',JSON.stringify(state.records));}
+let formScores={};
+function switchTab(t){document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',['form','records','dashboard','settings'][i]===t));document.querySelectorAll('.section').forEach(el=>el.classList.remove('active'));document.getElementById('sec-'+t).classList.add('active');if(t==='form')renderChecklistForm();if(t==='records')renderRecords();if(t==='dashboard')renderDashboard();if(t==='settings')renderTopics();}
+function setScore(i,score){formScores[i]=score;for(let s=1;s<=5;s++){const el=document.getElementById('star-'+i+'-'+s);if(el)el.classList.toggle('active',s<=score);}const lbl=document.getElementById('slabel-'+i);if(lbl)lbl.textContent=score?SCORE_LABELS[score]:'';updateTotalScore();}
+function updateTotalScore(){const n=state.topics.length,max=n*5,got=state.topics.reduce((s,_,i)=>s+(formScores[i]||0),0);const el=document.getElementById('total-score-val');if(el){const pct=max?Math.round(got/max*100):0;el.textContent=got+' / '+max+'  ('+pct+'%)';el.style.color=pct>=80?'#3B6D11':pct>=60?'#BA7517':'#A32D2D';}}
+function renderChecklistForm(){formScores={};const el=document.getElementById('checklist-form-items');if(!state.topics.length){el.innerHTML='<div class="empty-state">ยังไม่มีหัวข้อ</div>';return;}el.innerHTML=state.topics.map((t,i)=>`<div class="topic-block"><div class="topic-title">${i+1}. ${t}</div><div class="star-row">${[1,2,3,4,5].map(s=>`<span class="star" id="star-${i}-${s}" onclick="setScore(${i},${s})">&#9733;</span>`).join('')}<span class="score-label" id="slabel-${i}"></span></div><input class="note-input" id="cn-${i}" placeholder="บันทึกผล / หมายเหตุ..."></div>`).join('');updateTotalScore();}
+function resetForm(){document.getElementById('f-inspector').value='';document.getElementById('f-inspectee').value='';document.getElementById('f-date').value=new Date().toISOString().split('T')[0];document.getElementById('f-location').value='';document.getElementById('f-note').value='';renderChecklistForm();}
+function saveRecord(){const inspector=document.getElementById('f-inspector').value;const inspectee=document.getElementById('f-inspectee').value;const date=document.getElementById('f-date').value;const location=document.getElementById('f-location').value;if(!inspector){alert('กรุณาเลือกชื่อผู้ตรวจ');return;}if(!inspectee){alert('กรุณาเลือกชื่อผู้ถูกตรวจ');return;}if(!date){alert('กรุณาระบุวันที่ตรวจ');return;}if(!location){alert('กรุณาเลือกสถานที่ตรวจ');return;}const items=state.topics.map((t,i)=>({topic:t,score:formScores[i]||0,note:document.getElementById('cn-'+i)?.value||''}));const maxTotal=state.topics.length*5,got=items.reduce((s,it)=>s+it.score,0),pct=maxTotal?Math.round(got/maxTotal*100):0;const record={id:Date.now(),inspector,inspectee,date,location,note:document.getElementById('f-note').value,items,got,maxTotal,pct,createdAt:new Date().toISOString()};state.records.unshift(record);save();resetForm();switchTab('records');}
+function scoreBadge(pct){return pct>=80?'badge-pass':pct>=60?'badge-mid':'badge-fail';}
+function renderRecords(q=''){const el=document.getElementById('records-list');let recs=state.records;if(q)recs=recs.filter(r=>r.inspector.includes(q)||r.inspectee.includes(q)||(r.location||'').includes(q));if(!recs.length){el.innerHTML='<div class="empty-state">ยังไม่มีรายการตรวจ</div>';return;}el.innerHTML=recs.map(r=>`<div class="record-item" onclick="viewRecord(${r.id})"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:500;font-size:13px">${r.inspectee}</span><span class="status-badge ${scoreBadge(r.pct)}">${r.got}/${r.maxTotal} (${r.pct}%)</span></div><div class="record-meta"><span style="font-size:11px;color:#6b7280">ผู้ตรวจ: ${r.inspector}</span><span style="font-size:11px;color:#6b7280">${r.date}</span><span style="font-size:11px;color:#6b7280">📍 ${r.location||'-'}</span></div></div>`).join('');}
+function starsDisplay(score){return[1,2,3,4,5].map(s=>`<span style="color:${s<=score?'#EF9F27':'#d1d5db'}">&#9733;</span>`).join('');}
+function viewRecord(id){const r=state.records.find(x=>x.id===id);if(!r)return;document.getElementById('modal-content').innerHTML=`<div class="modal-header"><span style="font-weight:500;font-size:15px">รายละเอียดการตรวจ</span><button class="btn btn-secondary btn-sm" onclick="document.getElementById('modal').style.display='none'">ปิด</button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;font-size:13px"><div><span style="color:#6b7280">ผู้ตรวจ: </span>${r.inspector}</div><div><span style="color:#6b7280">ผู้ถูกตรวจ: </span>${r.inspectee}</div><div><span style="color:#6b7280">วันที่: </span>${r.date}</div><div><span style="color:#6b7280">สถานที่: </span>${r.location||'-'}</div></div><div style="text-align:center;margin-bottom:1rem"><div style="font-size:28px;font-weight:500;color:${r.pct>=80?'#3B6D11':r.pct>=60?'#BA7517':'#A32D2D'}">${r.got} <span style="font-size:16px;color:#6b7280">/ ${r.maxTotal}</span></div><div style="font-size:13px;color:#6b7280">${r.pct}% — ${r.pct>=80?'ผ่านเกณฑ์ดี':r.pct>=60?'ปานกลาง':'ต้องปรับปรุง'}</div></div>${r.items.map((it,i)=>`<div style="padding:10px 0;border-bottom:0.5px solid #e5e7eb"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:500">${i+1}. ${it.topic}</span><span>${starsDisplay(it.score)} <span style="font-size:12px;color:#6b7280">${it.score}/5</span></span></div>${it.note?`<div style="font-size:11px;color:#6b7280;margin-top:4px">${it.note}</div>`:''}</div>`).join('')}${r.note?`<div style="font-size:12px;color:#6b7280;margin-top:10px">หมายเหตุ: ${r.note}</div>`:''}<div style="margin-top:1rem;display:flex;gap:8px;justify-content:flex-end"><button class="btn btn-danger btn-sm" onclick="deleteRecord(${r.id})">ลบรายการนี้</button></div>`;document.getElementById('modal').style.display='flex';}
+function deleteRecord(id){if(!confirm('ยืนยันลบรายการนี้?'))return;state.records=state.records.filter(x=>x.id!==id);save();document.getElementById('modal').style.display='none';renderRecords();}
+function closeModal(e){if(e.target.id==='modal')document.getElementById('modal').style.display='none';}
+function renderDashboard(){const recs=state.records,total=recs.length,avgPct=total?Math.round(recs.reduce((s,r)=>s+r.pct,0)/total):0;const good=recs.filter(r=>r.pct>=80).length,bad=recs.filter(r=>r.pct<60).length;document.getElementById('dash-metrics').innerHTML=`<div class="metric-card"><div class="metric-val">${total}</div><div class="metric-lbl">การตรวจทั้งหมด</div></div><div class="metric-card"><div class="metric-val" style="color:#3B6D11">${good}</div><div class="metric-lbl">ผ่านเกณฑ์ดี (≥80%)</div></div><div class="metric-card"><div class="metric-val" style="color:#A32D2D">${bad}</div><div class="metric-lbl">ต้องปรับปรุง (<60%)</div></div><div class="metric-card"><div class="metric-val">${avgPct}%</div><div class="metric-lbl">คะแนนเฉลี่ย</div></div>`;const ts={};recs.forEach(r=>r.items.forEach(it=>{if(!ts[it.topic])ts[it.topic]={total:0,count:0};ts[it.topic].total+=it.score;ts[it.topic].count++;}));const topicEl=document.getElementById('dash-topics');if(!Object.keys(ts).length){topicEl.innerHTML='<div class="empty-state">ยังไม่มีข้อมูล</div>';}else topicEl.innerHTML=Object.entries(ts).map(([topic,s])=>{const avg=s.count?s.total/s.count:0,pct=Math.round(avg/5*100);return`<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>${topic}</span><span style="display:flex;align-items:center;gap:6px">${starsDisplay(Math.round(avg))}<span style="color:${pct>=80?'#3B6D11':pct>=60?'#BA7517':'#A32D2D'};font-weight:500">${avg.toFixed(1)}/5</span></span></div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${pct>=80?'#639922':pct>=60?'#EF9F27':'#E24B4A'}"></div></div></div>`;}).join('');const recent=recs.slice(0,5);document.getElementById('dash-recent').innerHTML=recent.length?recent.map(r=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid #e5e7eb;font-size:12px"><span>${r.inspectee} <span style="color:#6b7280">/ ${r.inspector}</span></span><span style="display:flex;gap:8px;align-items:center"><span style="color:#6b7280">📍 ${r.location}</span><span class="status-badge ${scoreBadge(r.pct)}">${r.got}/${r.maxTotal}</span></span></div>`).join(''):'<div class="empty-state">ยังไม่มีข้อมูล</div>';}
+function renderTopics(){const el=document.getElementById('topics-list');if(!state.topics.length){el.innerHTML='<div class="empty-state">ยังไม่มีหัวข้อ</div>';return;}el.innerHTML=state.topics.map((t,i)=>`<div class="topic-row"><input value="${t}" onchange="state.topics[${i}]=this.value;save()"><button class="btn btn-secondary btn-sm" onclick="moveTopic(${i},-1)" ${i===0?'disabled':''}>↑</button><button class="btn btn-secondary btn-sm" onclick="moveTopic(${i},1)" ${i===state.topics.length-1?'disabled':''}>↓</button><button class="btn btn-danger btn-sm" onclick="removeTopic(${i})">ลบ</button></div>`).join('');}
+function addTopic(){state.topics.push('หัวข้อใหม่');save();renderTopics();}
+function removeTopic(i){if(!confirm('ยืนยันลบหัวข้อนี้?'))return;state.topics.splice(i,1);save();renderTopics();}
+function moveTopic(i,dir){const t=state.topics,j=i+dir;if(j<0||j>=t.length)return;[t[i],t[j]]=[t[j],t[i]];save();renderTopics();}
+function clearTopics(){if(!confirm('ลบหัวข้อทั้งหมด?'))return;state.topics=[];save();renderTopics();}
+function bulkImport(){const lines=document.getElementById('bulk-import').value.split('\n').map(l=>l.trim()).filter(Boolean);if(!lines.length)return;state.topics=[...state.topics,...lines];document.getElementById('bulk-import').value='';save();renderTopics();}
+document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+renderChecklistForm();
+</script>
+</body>
+</html>
