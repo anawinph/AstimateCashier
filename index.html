@@ -6,85 +6,81 @@
 <title>ระบบ Checklist ตรวจสอบมาตรฐานการทำงาน</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --font-sans:'Sarabun',sans-serif;
-  --color-text-primary:#1a1a1a;--color-text-secondary:#6b7280;
-  --color-background-primary:#ffffff;--color-background-secondary:#f5f5f4;
-  --color-border-primary:#9ca3af;--color-border-secondary:#d1d5db;
-  --color-border-tertiary:#e5e7eb;--color-border-danger:#fca5a5;
-  --color-text-danger:#dc2626;--color-background-danger:#fef2f2;
-  --border-radius-md:6px;--border-radius-lg:10px;
-}
+:root{--font-sans:'Sarabun',sans-serif;--color-text-primary:#1a1a1a;--color-text-secondary:#6b7280;--color-bg:#ffffff;--color-bg2:#f5f5f4;--color-border:#e5e7eb;--color-border2:#d1d5db;--radius:6px;--radius-lg:10px;}
 body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);background:#f9fafb;min-height:100vh}
 .container{max-width:1100px;margin:0 auto;padding:20px 16px}
 h1{font-size:18px;font-weight:600;margin-bottom:2px}
-.subtitle{font-size:13px;color:#6b7280;margin-bottom:18px}
-.tab-bar{display:flex;gap:4px;margin-bottom:1.2rem;border-bottom:0.5px solid #e5e7eb;overflow-x:auto}
-.tab{padding:8px 16px;cursor:pointer;font-size:13px;color:#6b7280;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s;white-space:nowrap}
-.tab.active{color:#1a1a1a;border-bottom-color:#1a1a1a;font-weight:500}
-.tab:hover:not(.active){color:#1a1a1a}
+.subtitle{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px}
+.tab-bar{display:flex;gap:4px;margin-bottom:1.2rem;border-bottom:0.5px solid var(--color-border);overflow-x:auto}
+.tab{padding:8px 15px;cursor:pointer;font-size:13px;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:#1a1a1a;font-weight:500}
 .section{display:none}.section.active{display:block}
-.card{background:#fff;border:0.5px solid #e5e7eb;border-radius:10px;padding:1rem 1.1rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.card{background:var(--color-bg);border:0.5px solid var(--color-border);border-radius:var(--radius-lg);padding:1rem 1.1rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .form-row.full{grid-template-columns:1fr}
-label{font-size:11px;color:#6b7280;display:block;margin-bottom:3px;font-weight:500;text-transform:uppercase;letter-spacing:0.3px}
-input,select,textarea{width:100%;padding:7px 9px;border:0.5px solid #d1d5db;border-radius:6px;font-size:13px;font-family:var(--font-sans);background:#fff;color:#1a1a1a}
+.form-row.three{grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+label{font-size:11px;color:var(--color-text-secondary);display:block;margin-bottom:3px;font-weight:500;text-transform:uppercase;letter-spacing:0.3px}
+input,select,textarea{width:100%;padding:7px 9px;border:0.5px solid var(--color-border2);border-radius:var(--radius);font-size:13px;font-family:var(--font-sans);background:var(--color-bg);color:var(--color-text-primary)}
 input:focus,select:focus,textarea:focus{outline:none;border-color:#9ca3af}
 textarea{resize:vertical;min-height:50px}
-.btn{padding:7px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-family:var(--font-sans);transition:all 0.15s;border:none}
-.btn-primary{background:#1a1a1a;color:#fff}
-.btn-primary:hover{background:#333}
-.btn-secondary{background:transparent;border:0.5px solid #d1d5db;color:#1a1a1a}
-.btn-secondary:hover{background:#f5f5f4}
-.btn-danger{background:transparent;border:0.5px solid #fca5a5;color:#dc2626}
-.btn-danger:hover{background:#fef2f2}
+.btn{padding:7px 14px;border-radius:var(--radius);cursor:pointer;font-size:13px;font-family:var(--font-sans);transition:all 0.15s;border:none;white-space:nowrap}
+.btn-primary{background:#1a1a1a;color:#fff}.btn-primary:hover{background:#333}
+.btn-secondary{background:transparent;border:0.5px solid var(--color-border2);color:var(--color-text-primary)}.btn-secondary:hover{background:var(--color-bg2)}
+.btn-danger{background:transparent;border:0.5px solid #fca5a5;color:#dc2626}.btn-danger:hover{background:#fef2f2}
+.btn-draft{background:#f59e0b;color:#fff}.btn-draft:hover{background:#d97706}
+.btn-export{background:#2563eb;color:#fff}.btn-export:hover{background:#1d4ed8}
 .btn-sm{padding:4px 10px;font-size:12px}
-.topic-block{background:#f9fafb;border:0.5px solid #e5e7eb;border-radius:6px;padding:12px;margin-bottom:10px}
+.topic-block{background:var(--color-bg2);border:0.5px solid var(--color-border);border-radius:var(--radius);padding:12px;margin-bottom:10px}
 .topic-title{font-size:13px;font-weight:500;margin-bottom:8px}
 .star-row{display:flex;gap:5px;align-items:center;margin-bottom:6px}
 .star{font-size:22px;cursor:pointer;color:#d1d5db;transition:color 0.1s;user-select:none}
-.star.active{color:#EF9F27}
-.star:hover{color:#EF9F27}
-.score-label{font-size:11px;color:#6b7280;margin-left:5px}
-.note-input{width:100%;padding:5px 8px;border:0.5px solid #d1d5db;border-radius:6px;font-size:12px;font-family:var(--font-sans);background:#fff;color:#1a1a1a;margin-top:3px}
-.status-badge{display:inline-block;padding:2px 7px;border-radius:6px;font-size:11px;font-weight:500}
-.badge-pass{background:#EAF3DE;color:#3B6D11}
-.badge-fail{background:#FCEBEB;color:#A32D2D}
-.badge-mid{background:#FAEEDA;color:#BA7517}
-.record-item{padding:10px 12px;border:0.5px solid #e5e7eb;border-radius:6px;margin-bottom:6px;cursor:pointer;transition:all 0.15s;background:#fff}
-.record-item:hover{background:#f5f5f4}
+.star.active{color:#EF9F27}.star:hover{color:#EF9F27}
+.score-label{font-size:11px;color:var(--color-text-secondary);margin-left:5px}
+.note-input{width:100%;padding:5px 8px;border:0.5px solid var(--color-border2);border-radius:var(--radius);font-size:12px;font-family:var(--font-sans);background:var(--color-bg);color:var(--color-text-primary);margin-top:3px}
+.status-badge{display:inline-block;padding:2px 7px;border-radius:var(--radius);font-size:11px;font-weight:500}
+.badge-pass{background:#EAF3DE;color:#3B6D11}.badge-fail{background:#FCEBEB;color:#A32D2D}.badge-mid{background:#FAEEDA;color:#BA7517}.badge-draft{background:#FEF9C3;color:#854D0E}
+.record-item{padding:10px 12px;border:0.5px solid var(--color-border);border-radius:var(--radius);margin-bottom:6px;cursor:pointer;transition:all 0.15s;background:var(--color-bg)}
+.record-item:hover{background:var(--color-bg2)}
 .record-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:3px}
 .repeat-badge{display:inline-flex;align-items:center;gap:3px;background:#EEF2FF;color:#4338CA;border-radius:12px;padding:1px 7px;font-size:10px;font-weight:600}
-.photo-count-badge{display:inline-flex;align-items:center;gap:3px;background:#F0FDF4;color:#166534;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:600}
+.photo-count-badge{display:inline-flex;align-items:center;gap:2px;background:#F0FDF4;color:#166534;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:600}
 .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem}
-.metric-card{background:#fff;border:0.5px solid #e5e7eb;border-radius:8px;padding:12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
-.metric-val{font-size:22px;font-weight:500;margin-bottom:2px}
-.metric-lbl{font-size:10px;color:#6b7280}
+.metric-card{background:var(--color-bg);border:0.5px solid var(--color-border);border-radius:var(--radius);padding:12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.metric-val{font-size:22px;font-weight:500;margin-bottom:2px}.metric-lbl{font-size:10px;color:var(--color-text-secondary)}
 .progress-bar{height:7px;background:#f3f4f6;border-radius:4px;overflow:hidden;margin:5px 0}
 .progress-fill{height:100%;border-radius:4px;transition:width 0.3s}
 .flex-between{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .sec-title{font-size:14px;font-weight:500;margin-bottom:10px}
 .topic-row{display:flex;gap:6px;margin-bottom:7px;align-items:center}
 .topic-row input{flex:1}
-.empty-state{text-align:center;padding:1.5rem;color:#6b7280;font-size:13px}
+.empty-state{text-align:center;padding:1.5rem;color:var(--color-text-secondary);font-size:13px}
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:100}
-.modal{background:#fff;border-radius:10px;padding:1.25rem;width:92%;max-width:580px;max-height:88vh;overflow-y:auto;border:0.5px solid #e5e7eb}
+.modal{background:var(--color-bg);border-radius:var(--radius-lg);padding:1.25rem;width:92%;max-width:580px;max-height:88vh;overflow-y:auto;border:0.5px solid var(--color-border)}
 .modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
-.score-total-bar{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:0.5px solid #e5e7eb}
+.score-total-bar{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:0.5px solid var(--color-border)}
 .main-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.divider-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:#6b7280;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.divider-label::after{content:'';flex:1;height:0.5px;background:#e5e7eb}
-.photo-upload-area{border:1.5px dashed #d1d5db;border-radius:6px;padding:14px;margin-top:8px;cursor:pointer;transition:all 0.15s;text-align:center;background:#f9fafb}
-.photo-upload-area:hover{border-color:#9ca3af;background:#fff}
+.divider-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--color-text-secondary);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.divider-label::after{content:'';flex:1;height:0.5px;background:var(--color-border)}
+.photo-upload-area{border:1.5px dashed var(--color-border2);border-radius:var(--radius);padding:14px;margin-top:8px;cursor:pointer;text-align:center;background:var(--color-bg2)}
+.photo-upload-area:hover{border-color:#9ca3af;background:var(--color-bg)}
 .photo-upload-area input[type=file]{display:none}
 .photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
-.photo-thumb{position:relative;aspect-ratio:1;border-radius:6px;overflow:hidden;border:0.5px solid #e5e7eb}
+.photo-thumb{position:relative;aspect-ratio:1;border-radius:var(--radius);overflow:hidden;border:0.5px solid var(--color-border)}
 .photo-thumb img{width:100%;height:100%;object-fit:cover;cursor:pointer}
 .photo-thumb .del-photo{position:absolute;top:3px;right:3px;background:rgba(0,0,0,0.55);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .lightbox{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.88);z-index:200;display:flex;align-items:center;justify-content:center}
 .lightbox img{max-width:90vw;max-height:88vh;border-radius:8px;object-fit:contain}
-.lightbox-close{position:absolute;top:16px;right:20px;color:#fff;font-size:30px;cursor:pointer;line-height:1;font-weight:300}
-@media(max-width:700px){.main-layout{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}}
+.lightbox-close{position:absolute;top:16px;right:20px;color:#fff;font-size:30px;cursor:pointer;line-height:1}
+/* Export panel */
+.export-panel{background:var(--color-bg2);border:0.5px solid var(--color-border);border-radius:var(--radius);padding:12px;margin-top:8px;display:none}
+.export-panel.open{display:block}
+/* Toast */
+.toast{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-120px);background:#fff;border:2px solid #16a34a;border-radius:12px;padding:16px 24px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,0.15);z-index:300;transition:transform 0.4s cubic-bezier(.34,1.56,.64,1);min-width:240px;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast-icon{font-size:26px;line-height:1}
+.toast-msg{font-size:15px;font-weight:700;color:#16a34a}
+.toast-sub{font-size:12px;color:#6b7280;margin-top:2px}
+@media(max-width:700px){.main-layout{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}.form-row.three{grid-template-columns:1fr 1fr}}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
@@ -102,13 +98,12 @@ textarea{resize:vertical;min-height:50px}
   <!-- MAIN -->
   <div id="sec-main" class="section active">
     <div class="main-layout">
-      <!-- LEFT: Form -->
+      <!-- LEFT -->
       <div>
         <div class="divider-label">สร้างรายการตรวจ</div>
         <div class="card">
           <div class="form-row">
-            <div>
-              <label>ผู้ตรวจ</label>
+            <div><label>ผู้ตรวจ</label>
               <select id="f-inspector">
                 <option value="">— เลือก —</option>
                 <option>อนาวิล</option><option>ธัญรดา</option><option>รวิสรา</option>
@@ -116,8 +111,7 @@ textarea{resize:vertical;min-height:50px}
                 <option>พัทธ์ธีรา</option><option>ธันยนันท์</option><option>อาจณรงค์</option>
               </select>
             </div>
-            <div>
-              <label>ผู้ถูกตรวจ</label>
+            <div><label>ผู้ถูกตรวจ</label>
               <select id="f-inspectee">
                 <option value="">— เลือก —</option>
                 <option>สุนารี พรมโสดา</option><option>นาฏศุภางค์ ราศรีสวัสดิ์</option>
@@ -138,10 +132,10 @@ textarea{resize:vertical;min-height:50px}
               </select>
             </div>
           </div>
-          <div class="form-row">
+          <div class="form-row three">
             <div><label>วันที่ตรวจ</label><input id="f-date" type="date"></div>
-            <div>
-              <label>สถานที่</label>
+            <div><label>เวลาตรวจ</label><input id="f-time" type="time"></div>
+            <div><label>สถานที่</label>
               <select id="f-location">
                 <option value="">— เลือก —</option>
                 <option>ห้องการเงิน SCP</option><option>AUTO SPA</option>
@@ -169,28 +163,39 @@ textarea{resize:vertical;min-height:50px}
           </div>
         </div>
 
-        <!-- Photo Upload -->
         <div class="card">
           <div class="sec-title" style="margin-bottom:4px">📎 แนบรูปหลักฐาน</div>
-          <div style="font-size:12px;color:#6b7280;margin-bottom:6px">แนบได้สูงสุด 5 รูป — รองรับถ่ายจากกล้องมือถือโดยตรง</div>
+          <div style="font-size:12px;color:#6b7280;margin-bottom:6px">แนบได้สูงสุด 5 รูป — รองรับถ่ายจากกล้องมือถือ</div>
           <div class="photo-upload-area" onclick="document.getElementById('f-photos').click()">
             <input type="file" id="f-photos" accept="image/*" multiple onchange="handlePhotoUpload(event)">
-            <div style="font-size:26px;margin-bottom:4px">📷</div>
-            <div style="font-size:13px;color:#6b7280">คลิกหรือกดที่นี่เพื่อเลือก / ถ่ายรูป</div>
+            <div style="font-size:24px;margin-bottom:4px">📷</div>
+            <div style="font-size:13px;color:#6b7280">คลิกเพื่อเลือก / ถ่ายรูป</div>
           </div>
           <div id="photo-preview" class="photo-grid"></div>
         </div>
 
-        <div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:1rem">
+        <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-bottom:1rem">
           <button class="btn btn-secondary btn-sm" onclick="resetForm()">ล้างข้อมูล</button>
           <button class="btn btn-primary btn-sm" onclick="saveRecord()">✓ บันทึกการตรวจ</button>
         </div>
       </div>
 
-      <!-- RIGHT: List -->
+      <!-- RIGHT -->
       <div>
-        <div class="divider-label">รายการตรวจ</div>
-        <input placeholder="🔍 ค้นหา..." oninput="renderRecords(this.value)" style="margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <div class="divider-label" style="margin:0;flex:1">รายการตรวจ</div>
+          <button class="btn btn-export btn-sm" onclick="toggleExportPanel()">⬇ Export / Share</button>
+        </div>
+        <div id="export-panel" class="export-panel">
+          <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:#6b7280">เลือกรูปแบบที่ต้องการ Export</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn btn-sm btn-secondary" onclick="exportCSV()">📊 CSV (Excel)</button>
+            <button class="btn btn-sm btn-secondary" onclick="exportJSON()">📦 JSON</button>
+            <button class="btn btn-sm btn-secondary" onclick="exportHTMLReport()">🖨 รายงาน HTML</button>
+            <button class="btn btn-sm btn-secondary" onclick="shareText()">📤 Share ข้อความ</button>
+          </div>
+        </div>
+        <input id="search-input" placeholder="🔍 ค้นหา..." oninput="renderRecords(this.value)" style="margin-bottom:10px;margin-top:8px">
         <div id="records-list" style="max-height:820px;overflow-y:auto;padding-right:2px"></div>
       </div>
     </div>
@@ -225,46 +230,68 @@ textarea{resize:vertical;min-height:50px}
   </div>
 </div>
 
+<!-- Modal -->
 <div id="modal" style="display:none" class="modal-overlay" onclick="closeModal(event)">
   <div class="modal" id="modal-content"></div>
 </div>
 
+<!-- Lightbox -->
 <div id="lightbox" style="display:none" class="lightbox" onclick="closeLightbox()">
   <span class="lightbox-close">✕</span>
   <img id="lightbox-img" src="">
 </div>
 
+<!-- Toast popup -->
+<div id="toast" class="toast">
+  <div id="toast-icon" style="font-size:26px;line-height:1">✅</div>
+  <div>
+    <div id="toast-msg" class="toast-msg">บันทึกสำเร็จ!</div>
+    <div id="toast-sub" class="toast-sub"></div>
+  </div>
+</div>
+
 <script>
 const SCORE_LABELS=['','ต้องปรับปรุง','พอใช้','ปานกลาง','ดี','ดีเยี่ยม'];
 let state={
-  topics:JSON.parse(localStorage.getItem('ci6_topics')||'null')||['การต้อนรับ','การบริการ','Grooming'],
-  records:JSON.parse(localStorage.getItem('ci6_records')||'[]')
+  topics:JSON.parse(localStorage.getItem('ci7_topics')||'null')||['การต้อนรับ','การบริการ','Grooming'],
+  records:JSON.parse(localStorage.getItem('ci7_records')||'[]')
 };
-function save(){localStorage.setItem('ci6_topics',JSON.stringify(state.topics));localStorage.setItem('ci6_records',JSON.stringify(state.records));}
-let formScores={};
-let formPhotos=[];
+function save(){localStorage.setItem('ci7_topics',JSON.stringify(state.topics));localStorage.setItem('ci7_records',JSON.stringify(state.records));}
+let formScores={},formPhotos=[],toastTimer=null;
 
+/* Toast */
+function showToast(msg,sub,icon){
+  icon=icon||'✅';
+  document.getElementById('toast-icon').textContent=icon;
+  document.getElementById('toast-msg').textContent=msg;
+  document.getElementById('toast-sub').textContent=sub||'';
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+/* Photos */
 function handlePhotoUpload(e){
-  const files=[...e.target.files];
-  const remaining=5-formPhotos.length;
-  if(remaining<=0){alert('แนบรูปได้สูงสุด 5 รูปต่อการตรวจ 1 ครั้ง');return;}
-  const toAdd=files.slice(0,remaining);
-  if(files.length>remaining)alert('เลือกได้อีก '+remaining+' รูป — นำเข้า '+toAdd.length+' รูปแรก');
-  toAdd.forEach(file=>{
-    const reader=new FileReader();
-    reader.onload=ev=>{formPhotos.push(ev.target.result);renderPhotoPreview();};
-    reader.readAsDataURL(file);
+  const files=[...e.target.files],remaining=5-formPhotos.length;
+  if(remaining<=0){showToast('แนบรูปได้สูงสุด 5 รูป','','⚠️');return;}
+  files.slice(0,remaining).forEach(file=>{
+    const r=new FileReader();
+    r.onload=ev=>{formPhotos.push(ev.target.result);renderPhotoPreview();};
+    r.readAsDataURL(file);
   });
   e.target.value='';
 }
 function renderPhotoPreview(){
-  const el=document.getElementById('photo-preview');
-  el.innerHTML=formPhotos.map((src,i)=>`<div class="photo-thumb"><img src="${src}" onclick="openLightbox('${src}')"><button class="del-photo" onclick="removePhoto(${i})">✕</button></div>`).join('');
+  document.getElementById('photo-preview').innerHTML=formPhotos.map((src,i)=>
+    '<div class="photo-thumb"><img src="'+src+'" onclick="openLightbox(\''+src+'\')"><button class="del-photo" onclick="removePhoto('+i+')">✕</button></div>'
+  ).join('');
 }
 function removePhoto(i){formPhotos.splice(i,1);renderPhotoPreview();}
 function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').style.display='flex';}
 function closeLightbox(){document.getElementById('lightbox').style.display='none';}
 
+/* Tabs */
 function switchTab(t){
   document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',['main','dashboard','settings'][i]===t));
   document.querySelectorAll('.section').forEach(el=>el.classList.remove('active'));
@@ -273,7 +300,9 @@ function switchTab(t){
   if(t==='dashboard')renderDashboard();
   if(t==='settings')renderTopics();
 }
+
 function countPrev(name){return state.records.filter(r=>r.inspectee===name).length;}
+
 function setScore(i,score){
   formScores[i]=score;
   for(let s=1;s<=5;s++){const el=document.getElementById('star-'+i+'-'+s);if(el)el.classList.toggle('active',s<=score);}
@@ -289,77 +318,211 @@ function renderChecklistForm(){
   formScores={};
   const el=document.getElementById('checklist-form-items');
   if(!state.topics.length){el.innerHTML='<div class="empty-state">ยังไม่มีหัวข้อ</div>';return;}
-  el.innerHTML=state.topics.map((t,i)=>`<div class="topic-block"><div class="topic-title">${i+1}. ${t}</div><div class="star-row">${[1,2,3,4,5].map(s=>`<span class="star" id="star-${i}-${s}" onclick="setScore(${i},${s})">★</span>`).join('')}<span class="score-label" id="slabel-${i}"></span></div><input class="note-input" id="cn-${i}" placeholder="หมายเหตุ..."></div>`).join('');
+  el.innerHTML=state.topics.map((t,i)=>
+    '<div class="topic-block"><div class="topic-title">'+(i+1)+'. '+t+'</div><div class="star-row">'+
+    [1,2,3,4,5].map(s=>'<span class="star" id="star-'+i+'-'+s+'" onclick="setScore('+i+','+s+')">★</span>').join('')+
+    '<span class="score-label" id="slabel-'+i+'"></span></div><input class="note-input" id="cn-'+i+'" placeholder="หมายเหตุ..."></div>'
+  ).join('');
   updateTotalScore();
 }
 function resetForm(){
   ['f-inspector','f-inspectee','f-location','f-note'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+  const now=new Date();
+  document.getElementById('f-date').value=now.toISOString().split('T')[0];
+  document.getElementById('f-time').value=now.toTimeString().slice(0,5);
   formPhotos=[];renderPhotoPreview();renderChecklistForm();
 }
 function saveRecord(){
   const inspector=document.getElementById('f-inspector').value;
   const inspectee=document.getElementById('f-inspectee').value;
   const date=document.getElementById('f-date').value;
+  const time=document.getElementById('f-time').value;
   const location=document.getElementById('f-location').value;
-  if(!inspector){alert('กรุณาเลือกชื่อผู้ตรวจ');return;}
-  if(!inspectee){alert('กรุณาเลือกชื่อผู้ถูกตรวจ');return;}
-  if(!date){alert('กรุณาระบุวันที่ตรวจ');return;}
-  if(!location){alert('กรุณาเลือกสถานที่ตรวจ');return;}
+  if(!inspector){showToast('กรุณาเลือกชื่อผู้ตรวจ','','⚠️');return;}
+  if(!inspectee){showToast('กรุณาเลือกชื่อผู้ถูกตรวจ','','⚠️');return;}
+  if(!date){showToast('กรุณาระบุวันที่ตรวจ','','⚠️');return;}
+  if(!location){showToast('กรุณาเลือกสถานที่ตรวจ','','⚠️');return;}
   const prevCount=countPrev(inspectee);
   const items=state.topics.map((t,i)=>({topic:t,score:formScores[i]||0,note:document.getElementById('cn-'+i)?.value||''}));
   const maxTotal=state.topics.length*5,got=items.reduce((s,it)=>s+it.score,0),pct=maxTotal?Math.round(got/maxTotal*100):0;
-  const record={id:Date.now(),inspector,inspectee,date,location,note:document.getElementById('f-note').value,items,got,maxTotal,pct,repeatNo:prevCount+1,photos:[...formPhotos],createdAt:new Date().toISOString()};
+  const record={id:Date.now(),inspector,inspectee,date,time,location,note:document.getElementById('f-note').value,items,got,maxTotal,pct,repeatNo:prevCount+1,photos:[...formPhotos],createdAt:new Date().toISOString()};
   state.records.unshift(record);save();resetForm();renderRecords();
+  showToast('บันทึกการตรวจสำเร็จ!',inspectee+' — '+date+' '+time,'✅');
 }
+
+/* Export / Share */
+function toggleExportPanel(){document.getElementById('export-panel').classList.toggle('open');}
+
+function downloadFile(name,content,type){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([content],{type}));
+  a.download=name;a.click();
+}
+function exportCSV(){
+  const headers=['วันที่','เวลา','ผู้ตรวจ','ผู้ถูกตรวจ','สถานที่',...state.topics,'คะแนนรวม','%','สถานะ'];
+  const rows=state.records.map(r=>[
+    r.date,r.time||'',r.inspector,r.inspectee,r.location,
+    ...r.items.map(it=>it.score),
+    r.got,r.pct,r.pct>=80?'ผ่านเกณฑ์ดี':r.pct>=60?'ปานกลาง':'ต้องปรับปรุง'
+  ]);
+  const csv=[headers,...rows].map(row=>row.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n');
+  downloadFile('checklist_'+new Date().toISOString().slice(0,10)+'.csv','\ufeff'+csv,'text/csv');
+  showToast('Export CSV สำเร็จ','เปิดด้วย Excel ได้เลย','📊');
+}
+function exportJSON(){
+  const data=JSON.stringify({exportedAt:new Date().toISOString(),records:state.records},null,2);
+  downloadFile('checklist_'+new Date().toISOString().slice(0,10)+'.json',data,'application/json');
+  showToast('Export JSON สำเร็จ','','📦');
+}
+function exportHTMLReport(){
+  const thTopics=state.topics.map(t=>'<th>'+t+'</th>').join('');
+  const rows=state.records.map(r=>
+    '<tr><td>'+r.date+'</td><td>'+(r.time||'-')+'</td><td>'+r.inspector+'</td><td>'+r.inspectee+'</td><td>'+r.location+'</td>'+
+    r.items.map(it=>'<td style="text-align:center">'+it.score+'/5</td>').join('')+
+    '<td style="text-align:center;font-weight:600;color:'+(r.pct>=80?'#3B6D11':r.pct>=60?'#BA7517':'#A32D2D')+'">'+r.got+'/'+r.maxTotal+' ('+r.pct+'%)</td></tr>'
+  ).join('');
+  const html='<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><title>รายงานการตรวจ</title>'+
+    '<style>body{font-family:sans-serif;padding:24px;font-size:13px}h1{margin-bottom:4px}p{color:#6b7280;margin-bottom:16px}'+
+    'table{border-collapse:collapse;width:100%;min-width:600px}th,td{border:1px solid #e5e7eb;padding:8px 10px;text-align:left}'+
+    'th{background:#f9fafb;font-weight:600}tr:nth-child(even){background:#f9fafb}</style></head>'+
+    '<body><h1>📋 รายงานการตรวจสอบมาตรฐานการทำงาน</h1>'+
+    '<p>ออกรายงานเมื่อ: '+new Date().toLocaleString('th-TH')+'</p>'+
+    '<div style="overflow-x:auto"><table><thead><tr><th>วันที่</th><th>เวลา</th><th>ผู้ตรวจ</th><th>ผู้ถูกตรวจ</th><th>สถานที่</th>'+thTopics+'<th>คะแนนรวม</th></tr></thead>'+
+    '<tbody>'+rows+'</tbody></table></div></body></html>';
+  downloadFile('checklist_report_'+new Date().toISOString().slice(0,10)+'.html',html,'text/html');
+  showToast('Export รายงาน HTML สำเร็จ','เปิดในเบราว์เซอร์เพื่อพิมพ์','🖨');
+}
+function shareText(){
+  const lines=state.records.slice(0,10).map(r=>'• '+r.date+' '+r.time+' | '+r.inspectee+' | '+r.location+' | '+r.got+'/'+r.maxTotal+' ('+r.pct+'%)');
+  const text='📋 สรุปผลการตรวจสอบมาตรฐาน\n'+lines.join('\n')+'\n\nออกเมื่อ: '+new Date().toLocaleString('th-TH');
+  if(navigator.share){
+    navigator.share({title:'สรุปผลการตรวจ',text:text}).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(text).then(()=>showToast('คัดลอกข้อความสำเร็จ','วางใน Line / Chat ได้เลย','📤')).catch(()=>{
+      prompt('คัดลอกข้อความด้านล่าง:',text);
+    });
+  }
+}
+
 function scoreBadge(pct){return pct>=80?'badge-pass':pct>=60?'badge-mid':'badge-fail';}
 function repeatTag(n){if(n<=1)return'';return'<span class="repeat-badge">🔁 ครั้งที่ '+n+'</span>';}
-function renderRecords(q=''){
+
+function renderRecords(q){
+  q=q||'';
   const el=document.getElementById('records-list');
   let recs=state.records;
   if(q)recs=recs.filter(r=>r.inspector.includes(q)||r.inspectee.includes(q)||(r.location||'').includes(q));
   if(!recs.length){el.innerHTML='<div class="empty-state">ยังไม่มีรายการตรวจ</div>';return;}
-  el.innerHTML=recs.map(r=>`<div class="record-item" onclick="viewRecord(${r.id})"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:4px"><span style="font-weight:500;font-size:13px;line-height:1.4">${r.inspectee} ${repeatTag(r.repeatNo||1)}</span><span class="status-badge ${scoreBadge(r.pct)}" style="flex-shrink:0">${r.got}/${r.maxTotal} (${r.pct}%)</span></div><div class="record-meta"><span style="font-size:11px;color:#6b7280">👤 ${r.inspector}</span><span style="font-size:11px;color:#6b7280">${r.date}</span><span style="font-size:11px;color:#6b7280">📍 ${r.location||'-'}</span>${(r.photos||[]).length?'<span class="photo-count-badge">📷 '+r.photos.length+' รูป</span>':''}</div></div>`).join('');
+  el.innerHTML=recs.map(r=>
+    '<div class="record-item" onclick="viewRecord('+r.id+')">'+
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:4px">'+
+    '<span style="font-weight:500;font-size:13px;line-height:1.4">'+r.inspectee+' '+repeatTag(r.repeatNo||1)+'</span>'+
+    '<span class="status-badge '+scoreBadge(r.pct)+'" style="flex-shrink:0">'+r.got+'/'+r.maxTotal+' ('+r.pct+'%)</span></div>'+
+    '<div class="record-meta">'+
+    '<span style="font-size:11px;color:#6b7280">👤 '+r.inspector+'</span>'+
+    '<span style="font-size:11px;color:#6b7280">🗓 '+r.date+(r.time?' ⏰ '+r.time:'')+'</span>'+
+    '<span style="font-size:11px;color:#6b7280">📍 '+(r.location||'-')+'</span>'+
+    ((r.photos||[]).length?'<span class="photo-count-badge">📷 '+r.photos.length+' รูป</span>':'')+
+    '</div></div>'
+  ).join('');
 }
+
 function starsDisplay(score){return[1,2,3,4,5].map(s=>'<span style="color:'+(s<=score?'#EF9F27':'#d1d5db')+'">★</span>').join('');}
+
 function viewRecord(id){
   const r=state.records.find(x=>x.id===id);if(!r)return;
   const photos=r.photos||[];
-  const photoHTML=photos.length?'<div style="margin-top:12px"><div style="font-size:12px;font-weight:500;margin-bottom:6px;color:#6b7280">📷 รูปหลักฐาน ('+photos.length+' รูป)</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">'+photos.map(src=>'<div style="aspect-ratio:1;border-radius:6px;overflow:hidden;border:0.5px solid #e5e7eb;cursor:pointer" onclick="openLightbox(\''+src+'\')"><img src="'+src+'" style="width:100%;height:100%;object-fit:cover"></div>').join('')+'</div></div>':'';
-  document.getElementById('modal-content').innerHTML='<div class="modal-hdr"><span style="font-weight:500;font-size:15px">รายละเอียดการตรวจ '+(r.repeatNo>1?'<span class="repeat-badge">🔁 ครั้งที่ '+r.repeatNo+'</span>':'')+'</span><button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'modal\').style.display=\'none\'">ปิด</button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;font-size:13px"><div><span style="color:#6b7280">ผู้ตรวจ: </span>'+r.inspector+'</div><div><span style="color:#6b7280">ผู้ถูกตรวจ: </span>'+r.inspectee+'</div><div><span style="color:#6b7280">วันที่: </span>'+r.date+'</div><div><span style="color:#6b7280">สถานที่: </span>'+(r.location||'-')+'</div></div><div style="text-align:center;margin-bottom:1rem"><div style="font-size:26px;font-weight:500;color:'+(r.pct>=80?'#3B6D11':r.pct>=60?'#BA7517':'#A32D2D')+'">'+r.got+' <span style="font-size:14px;color:#6b7280">/ '+r.maxTotal+'</span></div><div style="font-size:12px;color:#6b7280">'+r.pct+'% — '+(r.pct>=80?'ผ่านเกณฑ์ดี':r.pct>=60?'ปานกลาง':'ต้องปรับปรุง')+'</div></div>'+r.items.map((it,i)=>'<div style="padding:9px 0;border-bottom:0.5px solid #e5e7eb"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:500">'+(i+1)+'. '+it.topic+'</span><span>'+starsDisplay(it.score)+' <span style="font-size:11px;color:#6b7280">'+it.score+'/5</span></span></div>'+(it.note?'<div style="font-size:11px;color:#6b7280;margin-top:3px">'+it.note+'</div>':'')+'</div>').join('')+(r.note?'<div style="font-size:12px;color:#6b7280;margin-top:10px">หมายเหตุ: '+r.note+'</div>':'')+photoHTML+'<div style="margin-top:1rem;display:flex;gap:8px;justify-content:flex-end"><button class="btn btn-danger btn-sm" onclick="deleteRecord('+r.id+')">ลบรายการนี้</button></div>';
+  const photoHTML=photos.length?
+    '<div style="margin-top:12px"><div style="font-size:12px;font-weight:500;margin-bottom:6px;color:#6b7280">📷 รูปหลักฐาน ('+photos.length+' รูป)</div>'+
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">'+
+    photos.map(src=>'<div style="aspect-ratio:1;border-radius:6px;overflow:hidden;border:0.5px solid #e5e7eb;cursor:pointer" onclick="openLightbox(\''+src+'\')"><img src="'+src+'" style="width:100%;height:100%;object-fit:cover"></div>').join('')+
+    '</div></div>':'';
+  document.getElementById('modal-content').innerHTML=
+    '<div class="modal-hdr"><span style="font-weight:500;font-size:15px">รายละเอียดการตรวจ '+(r.repeatNo>1?'<span class="repeat-badge">🔁 ครั้งที่ '+r.repeatNo+'</span>':'')+'</span>'+
+    '<button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'modal\').style.display=\'none\'">ปิด</button></div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;font-size:13px">'+
+    '<div><span style="color:#6b7280">ผู้ตรวจ: </span>'+r.inspector+'</div>'+
+    '<div><span style="color:#6b7280">ผู้ถูกตรวจ: </span>'+r.inspectee+'</div>'+
+    '<div><span style="color:#6b7280">วันที่/เวลา: </span>'+r.date+(r.time?' เวลา '+r.time:'')+'</div>'+
+    '<div><span style="color:#6b7280">สถานที่: </span>'+(r.location||'-')+'</div></div>'+
+    '<div style="text-align:center;margin-bottom:1rem">'+
+    '<div style="font-size:26px;font-weight:500;color:'+(r.pct>=80?'#3B6D11':r.pct>=60?'#BA7517':'#A32D2D')+'">'+r.got+' <span style="font-size:14px;color:#6b7280">/ '+r.maxTotal+'</span></div>'+
+    '<div style="font-size:12px;color:#6b7280">'+r.pct+'% — '+(r.pct>=80?'ผ่านเกณฑ์ดี':r.pct>=60?'ปานกลาง':'ต้องปรับปรุง')+'</div></div>'+
+    r.items.map((it,i)=>
+      '<div style="padding:9px 0;border-bottom:0.5px solid #e5e7eb">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center">'+
+      '<span style="font-size:13px;font-weight:500">'+(i+1)+'. '+it.topic+'</span>'+
+      '<span>'+starsDisplay(it.score)+' <span style="font-size:11px;color:#6b7280">'+it.score+'/5</span></span></div>'+
+      (it.note?'<div style="font-size:11px;color:#6b7280;margin-top:3px">'+it.note+'</div>':'')+
+      '</div>'
+    ).join('')+
+    (r.note?'<div style="font-size:12px;color:#6b7280;margin-top:10px">หมายเหตุ: '+r.note+'</div>':'')+
+    photoHTML+
+    '<div style="margin-top:1rem;display:flex;gap:8px;justify-content:flex-end">'+
+    '<button class="btn btn-danger btn-sm" onclick="deleteRecord('+r.id+')">ลบรายการนี้</button></div>';
   document.getElementById('modal').style.display='flex';
 }
+
 function deleteRecord(id){
   if(!confirm('ยืนยันลบรายการนี้?'))return;
   state.records=state.records.filter(x=>x.id!==id);
-  const byPerson={};[...state.records].reverse().forEach(r=>{byPerson[r.inspectee]=(byPerson[r.inspectee]||0)+1;r.repeatNo=byPerson[r.inspectee];});
+  const byP={};[...state.records].reverse().forEach(r=>{byP[r.inspectee]=(byP[r.inspectee]||0)+1;r.repeatNo=byP[r.inspectee];});
   save();document.getElementById('modal').style.display='none';renderRecords();
 }
 function closeModal(e){if(e.target.id==='modal')document.getElementById('modal').style.display='none';}
+
 function renderDashboard(){
   const recs=state.records,total=recs.length,avgPct=total?Math.round(recs.reduce((s,r)=>s+r.pct,0)/total):0;
   const good=recs.filter(r=>r.pct>=80).length,bad=recs.filter(r=>r.pct<60).length;
-  document.getElementById('dash-metrics').innerHTML='<div class="metric-card"><div class="metric-val">'+total+'</div><div class="metric-lbl">การตรวจทั้งหมด</div></div><div class="metric-card"><div class="metric-val" style="color:#3B6D11">'+good+'</div><div class="metric-lbl">ผ่านเกณฑ์ดี (≥80%)</div></div><div class="metric-card"><div class="metric-val" style="color:#A32D2D">'+bad+'</div><div class="metric-lbl">ต้องปรับปรุง (<60%)</div></div><div class="metric-card"><div class="metric-val">'+avgPct+'%</div><div class="metric-lbl">คะแนนเฉลี่ย</div></div>';
+  document.getElementById('dash-metrics').innerHTML=
+    '<div class="metric-card"><div class="metric-val">'+total+'</div><div class="metric-lbl">การตรวจทั้งหมด</div></div>'+
+    '<div class="metric-card"><div class="metric-val" style="color:#3B6D11">'+good+'</div><div class="metric-lbl">ผ่านเกณฑ์ดี (≥80%)</div></div>'+
+    '<div class="metric-card"><div class="metric-val" style="color:#A32D2D">'+bad+'</div><div class="metric-lbl">ต้องปรับปรุง (<60%)</div></div>'+
+    '<div class="metric-card"><div class="metric-val">'+avgPct+'%</div><div class="metric-lbl">คะแนนเฉลี่ย</div></div>';
   const ts={};recs.forEach(r=>r.items.forEach(it=>{if(!ts[it.topic])ts[it.topic]={total:0,count:0};ts[it.topic].total+=it.score;ts[it.topic].count++;}));
-  document.getElementById('dash-topics').innerHTML=Object.keys(ts).length?Object.entries(ts).map(([topic,s])=>{const avg=s.count?s.total/s.count:0,pct=Math.round(avg/5*100);return'<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>'+topic+'</span><span style="color:'+(pct>=80?'#3B6D11':pct>=60?'#BA7517':'#A32D2D')+';font-weight:500">'+avg.toFixed(1)+'/5 '+starsDisplay(Math.round(avg))+'</span></div><div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%;background:'+(pct>=80?'#639922':pct>=60?'#EF9F27':'#E24B4A')+'"></div></div></div>';}).join(''):'<div class="empty-state">ยังไม่มีข้อมูล</div>';
+  document.getElementById('dash-topics').innerHTML=Object.keys(ts).length?
+    Object.entries(ts).map(([topic,s])=>{const avg=s.count?s.total/s.count:0,pct=Math.round(avg/5*100);
+      return'<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>'+topic+'</span>'+
+      '<span style="color:'+(pct>=80?'#3B6D11':pct>=60?'#BA7517':'#A32D2D')+';font-weight:500">'+avg.toFixed(1)+'/5 '+starsDisplay(Math.round(avg))+'</span></div>'+
+      '<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%;background:'+(pct>=80?'#639922':pct>=60?'#EF9F27':'#E24B4A')+'"></div></div></div>';
+    }).join(''):'<div class="empty-state">ยังไม่มีข้อมูล</div>';
   const freq={};recs.forEach(r=>{freq[r.inspectee]=(freq[r.inspectee]||0)+1;});
-  document.getElementById('dash-freq').innerHTML=Object.keys(freq).length?Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([name,cnt])=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid #e5e7eb;font-size:13px"><span>'+name+'</span><span class="repeat-badge">🔁 '+cnt+' ครั้ง</span></div>').join(''):'<div class="empty-state">ยังไม่มีข้อมูล</div>';
-  const recent=recs.slice(0,6);
-  document.getElementById('dash-recent').innerHTML=recent.length?recent.map(r=>'<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid #e5e7eb;font-size:12px"><span>'+r.inspectee+' '+repeatTag(r.repeatNo||1)+' <span style="color:#6b7280">/ '+r.inspector+'</span></span><span style="display:flex;gap:6px;align-items:center">'+(r.photos&&r.photos.length?'<span class="photo-count-badge">📷'+r.photos.length+'</span>':'')+'<span class="status-badge '+scoreBadge(r.pct)+'">'+r.got+'/'+r.maxTotal+'</span></span></div>').join(''):'<div class="empty-state">ยังไม่มีข้อมูล</div>';
+  document.getElementById('dash-freq').innerHTML=Object.keys(freq).length?
+    Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([name,cnt])=>
+      '<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid #e5e7eb;font-size:13px"><span>'+name+'</span><span class="repeat-badge">🔁 '+cnt+' ครั้ง</span></div>'
+    ).join(''):'<div class="empty-state">ยังไม่มีข้อมูล</div>';
+  document.getElementById('dash-recent').innerHTML=recs.slice(0,6).length?
+    recs.slice(0,6).map(r=>
+      '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid #e5e7eb;font-size:12px">'+
+      '<span>'+r.inspectee+' '+repeatTag(r.repeatNo||1)+' <span style="color:#6b7280">/ '+r.inspector+'</span></span>'+
+      '<span style="display:flex;gap:6px;align-items:center"><span style="color:#6b7280">'+r.date+(r.time?' ⏰'+r.time:'')+'</span>'+
+      '<span class="status-badge '+scoreBadge(r.pct)+'">'+r.got+'/'+r.maxTotal+'</span></span></div>'
+    ).join(''):'<div class="empty-state">ยังไม่มีข้อมูล</div>';
 }
+
 function renderTopics(){
   const el=document.getElementById('topics-list');
   if(!state.topics.length){el.innerHTML='<div class="empty-state">ยังไม่มีหัวข้อ</div>';return;}
-  el.innerHTML=state.topics.map((t,i)=>'<div class="topic-row"><input value="'+t+'" onchange="state.topics['+i+']=this.value;save()"><button class="btn btn-secondary btn-sm" onclick="moveTopic('+i+',-1)" '+(i===0?'disabled':'')+'">↑</button><button class="btn btn-secondary btn-sm" onclick="moveTopic('+i+',1)" '+(i===state.topics.length-1?'disabled':'')+'">↓</button><button class="btn btn-danger btn-sm" onclick="removeTopic('+i+')">ลบ</button></div>').join('');
+  el.innerHTML=state.topics.map((t,i)=>
+    '<div class="topic-row"><input value="'+t+'" onchange="state.topics['+i+']=this.value;save()">'+
+    '<button class="btn btn-secondary btn-sm" onclick="moveTopic('+i+',-1)" '+(i===0?'disabled':'')+'>↑</button>'+
+    '<button class="btn btn-secondary btn-sm" onclick="moveTopic('+i+',1)" '+(i===state.topics.length-1?'disabled':'')+'>↓</button>'+
+    '<button class="btn btn-danger btn-sm" onclick="removeTopic('+i+')">ลบ</button></div>'
+  ).join('');
 }
 function addTopic(){state.topics.push('หัวข้อใหม่');save();renderTopics();}
 function removeTopic(i){if(!confirm('ยืนยันลบหัวข้อนี้?'))return;state.topics.splice(i,1);save();renderTopics();}
 function moveTopic(i,dir){const t=state.topics,j=i+dir;if(j<0||j>=t.length)return;[t[i],t[j]]=[t[j],t[i]];save();renderTopics();}
 function clearTopics(){if(!confirm('ลบหัวข้อทั้งหมด?'))return;state.topics=[];save();renderTopics();}
-function bulkImport(){const lines=document.getElementById('bulk-import').value.split('\n').map(l=>l.trim()).filter(Boolean);if(!lines.length)return;state.topics=[...state.topics,...lines];document.getElementById('bulk-import').value='';save();renderTopics();}
-function repeatTag(n){if(n<=1)return'';return'<span class="repeat-badge">🔁 ครั้งที่ '+n+'</span>';}
+function bulkImport(){
+  const lines=document.getElementById('bulk-import').value.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(!lines.length)return;state.topics=[...state.topics,...lines];
+  document.getElementById('bulk-import').value='';save();renderTopics();
+}
 
-document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+const now=new Date();
+document.getElementById('f-date').value=now.toISOString().split('T')[0];
+document.getElementById('f-time').value=now.toTimeString().slice(0,5);
 renderChecklistForm();
 renderRecords();
 </script>
